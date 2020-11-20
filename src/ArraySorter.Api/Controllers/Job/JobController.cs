@@ -1,7 +1,9 @@
+using ArraySorter.Application;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using ArraySorter.ReadModels;
 
 namespace ArraySorter.Api.Controllers.Job
 {
@@ -11,45 +13,51 @@ namespace ArraySorter.Api.Controllers.Job
     {
         private readonly ILogger<JobController> _logger;
 
-        public JobController(ILogger<JobController> logger)
+        private readonly ICommandHandler<EnqueueCommand> _handler;
+        private readonly IJobQueries _queries;
+
+        public JobController(
+            ILogger<JobController> logger,
+            ICommandHandler<EnqueueCommand> handler,
+            IJobQueries queries)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+
+            _queries = queries ?? throw new ArgumentNullException(nameof(queries));
         }
 
         [HttpPost]
         public async Task<OkObjectResult> Enqueue([FromBody] Request request)
         {
-            // Enqueue job as a CQRS command
+            var id = Guid.NewGuid();
 
-            await Task.CompletedTask;
+            _logger.LogInformation($"Enqueueing Job with id {id}");
 
-            _logger.LogInformation("Enqueuing Job");
+            await _handler.Handle(request.ToCommand(id));
 
-            return Ok(nameof(Enqueue));
+            return Ok($"{nameof(Enqueue)} with id {id}");
         }
 
         [HttpGet]
-        public async Task<OkObjectResult> Overview()
+        public OkObjectResult Overview()
         {
-            // Get from read model
-
-            await Task.CompletedTask;
-
             _logger.LogInformation("Getting Overview");
 
-            return Ok(nameof(Overview));
+            var jobs = _queries.Get();
+
+            return Ok(jobs);
         }
 
         [HttpGet("{id}")]
-        public async Task<OkObjectResult> Get([FromRoute] Guid id)
+        public OkObjectResult Get([FromRoute] Guid id)
         {
-            // Get from read model
-
-            await Task.CompletedTask;
-
             _logger.LogInformation($"Getting Job {id}");
 
-            return Ok(nameof(Get));
+            var job = _queries.Get(id);
+
+            return Ok(job);
         }
     }
 }

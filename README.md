@@ -14,6 +14,10 @@
 
 ## Architectural Decisions
 
+- Hexagonal Architecture (using Ports and adapters)
+- A CQRS implementation using Commands and Queries
+- Domain Driven Design
+
 ## Notes
 
 - .NET SDK 5.0 is required
