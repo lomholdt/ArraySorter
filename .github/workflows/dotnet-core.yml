@@ -28,3 +28,8 @@ jobs:
       with:
         reports: "**/TestResults/*/coverage.cobertura.xml"
         targetdir: coveragereport
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: coveragereport
+        path: coveragereport
