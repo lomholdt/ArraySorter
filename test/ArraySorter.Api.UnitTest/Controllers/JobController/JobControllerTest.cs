@@ -95,6 +95,7 @@ namespace ArraySorter.Api.UnitTest
             {
                 _readModel.Get().Returns(_jobs);
             }
+
             [Fact]
             public void It_invokes_Get()
             {

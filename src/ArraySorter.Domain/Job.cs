@@ -29,7 +29,7 @@ namespace ArraySorter.Domain
             Id = id;
         }
 
-        public void Enqueue(IEnumerable<int> input, ISystemTime systemDateTime)
+        public void Enqueue(IEnumerable<int> input, ISystemTime systemTime)
         {
             if (!input.Any())
             {
@@ -38,21 +38,21 @@ namespace ArraySorter.Domain
 
             Input = input;
 
-            Timestamp = systemDateTime.UtcNow;
+            Timestamp = systemTime.UtcNow;
 
             Status = Status.Pending;
         }
 
-        public void Process(ISystemTime systemDateTime)
+        public void Process(ISystemTime systemTime)
         {
             if (Status != Status.Pending)
             {
-                throw new InvalidStatusException($"Status {Status} is invalid. Expected: '{Status.Pending}'"); // TODO use custom exception
+                throw new InvalidStatusException($"Status '{Status}' is invalid. Expected: '{Status.Pending}'");
             }
 
-            Output = Input.OrderBy(i => i);
+            Output = Input.OrderBy(_ => _);
 
-            Duration = systemDateTime.UtcNow - Timestamp;
+            Duration = systemTime.UtcNow - Timestamp;
 
             Status = Status.Completed;
         }

@@ -15,18 +15,19 @@ namespace ArraySorter.Api.Controllers.Job
         private readonly ILogger<JobController> _logger;
 
         private readonly ICommandHandler<EnqueueCommand> _handler;
+
         private readonly IJobQueries _readModel;
 
         public JobController(
             ILogger<JobController> logger,
             ICommandHandler<EnqueueCommand> handler,
-            IJobQueries queries)
+            IJobQueries readModel)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-            _readModel = queries ?? throw new ArgumentNullException(nameof(queries));
+            _readModel = readModel ?? throw new ArgumentNullException(nameof(readModel));
         }
 
         [HttpPost]

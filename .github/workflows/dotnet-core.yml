@@ -28,4 +28,3 @@ jobs:
       with:
         reports: "**/TestResults/*/coverage.cobertura.xml"
         targetdir: coveragereport
-

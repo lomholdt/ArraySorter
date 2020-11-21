@@ -57,9 +57,9 @@ namespace ArraySorter.Api
 
             services.AddScoped<IJobRepository, InMemoryJobRepository>();
 
-            services.AddScoped<ISortingProcessingService, SortingProcessingService>();
+            services.AddScoped<IJobProcessingService, JobProcessingService>();
 
-            services.AddHostedService<SortingHostedService>();
+            services.AddHostedService<JobHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace ArraySorter.Api.HostedService
 {
-    public class SortingHostedService : BackgroundService
+    public class JobHostedService : BackgroundService
     {
-        private readonly ILogger<SortingHostedService> _logger;
+        private readonly ILogger<JobHostedService> _logger;
 
-        public IServiceProvider Services { get; }
+        private readonly IServiceProvider _services;
 
-        public SortingHostedService(ILogger<SortingHostedService> logger, IServiceProvider services)
+        public JobHostedService(ILogger<JobHostedService> logger, IServiceProvider services)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-            Services = services ?? throw new ArgumentNullException(nameof(services));
+            _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) =>
@@ -25,11 +25,11 @@ namespace ArraySorter.Api.HostedService
 
         private async Task DoWork(CancellationToken token)
         {
-            _logger.LogInformation($"{nameof(SortingHostedService)} is running.");
+            _logger.LogInformation($"{nameof(JobHostedService)} is running.");
 
-            using var scope = Services.CreateScope();
+            using var scope = _services.CreateScope();
 
-            var service = scope.ServiceProvider.GetRequiredService<ISortingProcessingService>();
+            var service = scope.ServiceProvider.GetRequiredService<IJobProcessingService>();
 
             await service.DoWork(token);
         }

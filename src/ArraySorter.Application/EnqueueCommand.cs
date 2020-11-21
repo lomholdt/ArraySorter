@@ -6,9 +6,9 @@ namespace ArraySorter.Application
 {
     public class EnqueueCommand : Command
     {
-        public Guid Id { get; init; }
+        public Guid Id { get; }
 
-        public IEnumerable<int> Input { get; init; } = Enumerable.Empty<int>();
+        public IEnumerable<int> Input { get; } = Enumerable.Empty<int>();
 
         public EnqueueCommand(Guid id, IEnumerable<int> input)
         {

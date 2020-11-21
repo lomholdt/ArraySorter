@@ -1,4 +1,4 @@
 namespace ArraySorter.Application
 {
-    public class Command { }
+    public abstract class Command { }
 }

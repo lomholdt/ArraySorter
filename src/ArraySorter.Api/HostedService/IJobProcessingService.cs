@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace ArraySorter.Api.HostedService
 {
-    public interface ISortingProcessingService
+    public interface IJobProcessingService
     {
         Task DoWork(CancellationToken stoppingToken);
     }
