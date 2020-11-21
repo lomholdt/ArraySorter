@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using ArraySorter.Infrastructure.Database;
 
 namespace ArraySorter.Infrastructure
 {
@@ -12,18 +13,20 @@ namespace ArraySorter.Infrastructure
     {
         private readonly ILogger<InMemoryJobRepository> _logger;
 
-        private static readonly ConcurrentDictionary<Guid, Job> _database = new();
+        private readonly ApplicationContext _context;
 
-        public InMemoryJobRepository(ILogger<InMemoryJobRepository> logger)
+        public InMemoryJobRepository(ILogger<InMemoryJobRepository> logger, ApplicationContext context)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public Job? Get(Guid id)
         {
             _logger.LogInformation($"Getting Job {id}");
 
-            var job = _database.GetValueOrDefault(id);
+            var job = _context.GetValueOrDefault(id);
 
             return job;
         }
@@ -32,7 +35,7 @@ namespace ArraySorter.Infrastructure
         {
             _logger.LogInformation("Getting all jobs");
 
-            var jobs = _database.Values.ToArray();
+            var jobs = _context.Values.ToArray();
 
             return jobs;
         }
@@ -41,7 +44,7 @@ namespace ArraySorter.Infrastructure
         {
             _logger.LogInformation($"Saving job {job.Id}");
 
-            _database.AddOrUpdate(job.Id, job, (key, oldValue) => job);
+            _context.AddOrUpdate(job.Id, job, (key, oldValue) => job);
         }
     }
 }

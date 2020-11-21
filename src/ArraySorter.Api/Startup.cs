@@ -1,25 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ArraySorter.Api.Middleware;
 using ArraySorter.Domain;
 using ArraySorter.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System.Data.Common;
 using ArraySorter.ReadModels;
 using ArraySorter.Infrastructure;
 using System.Text.Json.Serialization;
 using ArraySorter.Api.HostedService;
 using ArraySorter.Api.Configuration;
+using ArraySorter.Infrastructure.Database;
 
 namespace ArraySorter.Api
 {
@@ -58,6 +51,8 @@ namespace ArraySorter.Api
             services.AddScoped<IJobRepository, InMemoryJobRepository>();
 
             services.AddScoped<IJobProcessingService, JobProcessingService>();
+
+            services.AddSingleton<ApplicationContext>(); // Mock Context
 
             services.AddHostedService<JobHostedService>();
         }
