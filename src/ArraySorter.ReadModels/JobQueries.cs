@@ -44,7 +44,7 @@ namespace ArraySorter.ReadModels
             Input = self.Input,
             Output = self.Output,
             Timestamp = self.Timestamp,
-            Duration = self.Duration,
+            Duration = self.Duration?.Milliseconds,
             Status = (Status)self.Status,
         };
     }
@@ -59,7 +59,7 @@ namespace ArraySorter.ReadModels
 
         public DateTimeOffset Timestamp { get; init; }
 
-        public DateTimeOffset? Duration { get; init; }
+        public int? Duration { get; init; }
 
         public Status Status { get; init; }
     }

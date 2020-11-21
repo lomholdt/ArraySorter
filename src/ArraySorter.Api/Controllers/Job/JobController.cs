@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using ArraySorter.ReadModels;
+using System.Collections.Generic;
 
 namespace ArraySorter.Api.Controllers.Job
 {
@@ -14,7 +15,7 @@ namespace ArraySorter.Api.Controllers.Job
         private readonly ILogger<JobController> _logger;
 
         private readonly ICommandHandler<EnqueueCommand> _handler;
-        private readonly IJobQueries _queries;
+        private readonly IJobQueries _readModel;
 
         public JobController(
             ILogger<JobController> logger,
@@ -25,7 +26,7 @@ namespace ArraySorter.Api.Controllers.Job
 
             _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
-            _queries = queries ?? throw new ArgumentNullException(nameof(queries));
+            _readModel = queries ?? throw new ArgumentNullException(nameof(queries));
         }
 
         [HttpPost]
@@ -37,27 +38,27 @@ namespace ArraySorter.Api.Controllers.Job
 
             await _handler.Handle(request.ToCommand(id));
 
-            return Ok($"{nameof(Enqueue)} with id {id}");
+            return Ok(id);
         }
 
         [HttpGet]
-        public OkObjectResult Overview()
+        public IEnumerable<ReadModels.Job> Overview()
         {
             _logger.LogInformation("Getting Overview");
 
-            var jobs = _queries.Get();
+            var jobs = _readModel.Get();
 
-            return Ok(jobs);
+            return jobs;
         }
 
         [HttpGet("{id}")]
-        public OkObjectResult Get([FromRoute] Guid id)
+        public ReadModels.Job Get([FromRoute] Guid id)
         {
             _logger.LogInformation($"Getting Job {id}");
 
-            var job = _queries.Get(id);
+            var job = _readModel.Get(id);
 
-            return Ok(job);
+            return job;
         }
     }
 }

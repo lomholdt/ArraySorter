@@ -3,7 +3,7 @@ using ArraySorter.Domain;
 
 namespace ArraySorter.Application
 {
-    public class SystemTimeProvider : ISystemDateTime
+    public class SystemTimeProvider : ISystemTime
     {
         public DateTimeOffset UtcNow => DateTimeOffset.UtcNow;
     }

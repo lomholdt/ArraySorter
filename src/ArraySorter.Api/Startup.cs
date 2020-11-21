@@ -18,6 +18,8 @@ using System.Data.Common;
 using ArraySorter.ReadModels;
 using ArraySorter.Infrastructure;
 using System.Text.Json.Serialization;
+using ArraySorter.Api.HostedService;
+using ArraySorter.Api.Configuration;
 
 namespace ArraySorter.Api
 {
@@ -33,6 +35,9 @@ namespace ArraySorter.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var options = Configuration.Get<ApplicationOptions>();
+            services.Configure<ApplicationOptions>(Configuration);
+
             services
                 .AddControllers()
                 .AddJsonOptions(options => {
@@ -44,13 +49,17 @@ namespace ArraySorter.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ArraySorter.Api", Version = "v1" });
             });
 
-            services.AddScoped<ISystemDateTime, SystemTimeProvider>();
+            services.AddScoped<ISystemTime, SystemTimeProvider>();
 
             services.AddScoped<ICommandHandler<EnqueueCommand>, EnqueueCommandHandler>();
 
             services.AddScoped<IJobQueries, JobQueries>();
 
             services.AddScoped<IJobRepository, InMemoryJobRepository>();
+
+            services.AddScoped<ISortingProcessingService, SortingProcessingService>();
+
+            services.AddHostedService<SortingHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +73,8 @@ namespace ArraySorter.Api
             }
 
             app.UseAmIUp();
+
+            app.UseExceptionHandling();
 
             app.UseHttpsRedirection();
 

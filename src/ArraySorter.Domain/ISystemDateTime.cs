@@ -2,7 +2,7 @@ using System;
 
 namespace ArraySorter.Domain
 {
-    public interface ISystemDateTime
+    public interface ISystemTime
     {
         DateTimeOffset UtcNow { get; }
     }

@@ -1,5 +1,7 @@
 # Array Sorter
 
+![.NET Core](https://github.com/lomholdt/ArraySorter/workflows/.NET%20Core/badge.svg)
+
 ## Build
 
 `dotnet tool restore`

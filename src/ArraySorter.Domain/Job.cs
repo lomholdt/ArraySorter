@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArraySorter.Domain.Exceptions;
 
 namespace ArraySorter.Domain
 {
@@ -14,7 +15,7 @@ namespace ArraySorter.Domain
 
         public DateTimeOffset Timestamp { get; private set; }
 
-        public DateTimeOffset? Duration { get; private set; }
+        public TimeSpan? Duration { get; private set; }
 
         public Status Status { get; private set; }
 
@@ -28,11 +29,11 @@ namespace ArraySorter.Domain
             Id = id;
         }
 
-        public void Enqueue(IEnumerable<int> input, ISystemDateTime systemDateTime)
+        public void Enqueue(IEnumerable<int> input, ISystemTime systemDateTime)
         {
             if (!input.Any())
             {
-                throw new ArgumentException("Cannot enqueue empty array");
+                throw new EmptyInputException("Cannot enqueue empty array");
             }
 
             Input = input;
@@ -42,18 +43,18 @@ namespace ArraySorter.Domain
             Status = Status.Pending;
         }
 
-        public void SetOutput(IEnumerable<int> output)
+        public void Process(ISystemTime systemDateTime)
         {
             if (Status != Status.Pending)
             {
-                throw new Exception("Invalid status"); // TODO use custom exception
+                throw new InvalidStatusException($"Status {Status} is invalid. Expected: '{Status.Pending}'"); // TODO use custom exception
             }
 
-            Output = output;
+            Output = Input.OrderBy(i => i);
+
+            Duration = systemDateTime.UtcNow - Timestamp;
 
             Status = Status.Completed;
-
-            // Set duration
         }
     }
 }
