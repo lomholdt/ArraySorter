@@ -1,12 +1,10 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using ArraySorter.Api.Middleware;
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using Xunit;
-using System.Linq;
 
 namespace ArraySorter.Api.UnitTest.Middleware
 {
@@ -38,8 +36,12 @@ namespace ArraySorter.Api.UnitTest.Middleware
         {
             private readonly AmIUpMiddleware _sut;
 
+            private readonly HttpResponse _httpResponse = Substitute.For<HttpResponse>();
+
             public When_Hitting_Middleware()
             {
+                _httpContext.Response.Returns(_httpResponse);
+
                 _httpContext.Response.Body.Returns(_responseStream);
 
                 _sut = new AmIUpMiddleware(_next);
