@@ -128,6 +128,24 @@ namespace ArraySorter.Domain.UnitTest
             }
 
             [Fact]
+            public void It_calculates_the_correct_duration()
+            {
+                _systemTime.UtcNow.Returns(new DateTime(1988, 9, 21, 0 ,0, 0));
+
+                _sut.Enqueue(_input, _systemTime);
+
+                _systemTime.UtcNow.Returns(new DateTime(1988, 9, 21, 0 ,0, 10));
+
+                _sut.Process(_systemTime);
+
+                var expected = 10000;
+
+                var actual = _sut.Duration.Value.TotalMilliseconds;
+
+                Assert.Equal(expected, actual);
+            }
+
+            [Fact]
             public void It_sets_the_status()
             {
                 var expected = Status.Completed;
