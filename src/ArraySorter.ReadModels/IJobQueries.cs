@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ArraySorter.ReadModels.Models;
 
 namespace ArraySorter.ReadModels
 {

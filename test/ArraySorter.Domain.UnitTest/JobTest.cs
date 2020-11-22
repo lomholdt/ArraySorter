@@ -13,7 +13,13 @@ namespace ArraySorter.Domain.UnitTest
 
         private readonly ISystemTime _systemTime = Substitute.For<ISystemTime>();
 
+        private const int MockDurationSeconds = 7;
+
         private readonly DateTimeOffset _timestamp = new DateTime(1988, 09, 21);
+
+        private readonly DateTimeOffset _startTime = new DateTime(1988, 09, 21, 0, 0, 0);
+
+        private readonly DateTimeOffset _endTime = new DateTime(1988, 09, 21, 0, 0, MockDurationSeconds);
 
         private readonly IEnumerable<int> _input = new[] { 42, 7, 9, 13 };
 
@@ -21,8 +27,6 @@ namespace ArraySorter.Domain.UnitTest
 
         public JobTest()
         {
-            _systemTime.UtcNow.Returns(_timestamp);
-
             _sut = new Job(_id);
         }
 
@@ -47,6 +51,11 @@ namespace ArraySorter.Domain.UnitTest
 
         public sealed class When_Enqueueing : JobTest
         {
+            public When_Enqueueing()
+            {
+                _systemTime.UtcNow.Returns(_timestamp);
+            }
+
             [Fact]
             public void It_throws_if_input_is_empty()
             {
@@ -96,6 +105,11 @@ namespace ArraySorter.Domain.UnitTest
         {
             public When_Processing()
             {
+                _systemTime.UtcNow.Returns(
+                    _ => _timestamp,
+                    _ => _startTime,
+                    _ => _endTime);
+
                 _sut.Enqueue(_input, _systemTime);
 
                 _sut.Process(_systemTime);
@@ -130,17 +144,9 @@ namespace ArraySorter.Domain.UnitTest
             [Fact]
             public void It_calculates_the_correct_duration()
             {
-                _systemTime.UtcNow.Returns(new DateTime(1988, 9, 21, 0 ,0, 0));
+                var expected = MockDurationSeconds;
 
-                _sut.Enqueue(_input, _systemTime);
-
-                _systemTime.UtcNow.Returns(new DateTime(1988, 9, 21, 0 ,0, 10));
-
-                _sut.Process(_systemTime);
-
-                var expected = 10000;
-
-                var actual = _sut.Duration.Value.TotalMilliseconds;
+                var actual = _sut.Duration.Value.TotalSeconds;
 
                 Assert.Equal(expected, actual);
             }

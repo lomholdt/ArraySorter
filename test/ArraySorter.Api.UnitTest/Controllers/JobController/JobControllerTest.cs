@@ -1,6 +1,7 @@
 using ArraySorter.Api.Controllers.Job;
 using ArraySorter.Application;
 using ArraySorter.ReadModels;
+using ArraySorter.ReadModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

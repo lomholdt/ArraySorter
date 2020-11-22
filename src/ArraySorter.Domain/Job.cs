@@ -50,9 +50,11 @@ namespace ArraySorter.Domain
                 throw new InvalidStatusException($"Status '{Status}' is invalid. Expected: '{Status.Pending}'");
             }
 
+            var start = systemTime.UtcNow;
+
             Output = Input.OrderBy(_ => _);
 
-            Duration = systemTime.UtcNow - Timestamp;
+            Duration = systemTime.UtcNow - start;
 
             Status = Status.Completed;
         }

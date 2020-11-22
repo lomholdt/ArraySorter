@@ -31,10 +31,11 @@ namespace ArraySorter.Api.UnitTest.Middleware
         public ExceptionHandlingMiddlewareTest()
         {
             _httpContext.Response.Body = _responseStream;
+
             _sut = new ExceptionHandlingMiddleware(_next);
         }
 
-        public sealed class When_creating_instance
+        public sealed class When_Creating_Instance
         {
             [Fact]
             public void It_throws_if_next_is_null()
@@ -43,7 +44,7 @@ namespace ArraySorter.Api.UnitTest.Middleware
             }
         }
 
-        public sealed class When_hitting_middleware : ExceptionHandlingMiddlewareTest
+        public sealed class When_Hitting_Middleware : ExceptionHandlingMiddlewareTest
         {
             [Fact]
             public async Task It_invokes_next()

@@ -43,7 +43,7 @@ namespace ArraySorter.Api.Controllers.Job
         }
 
         [HttpGet]
-        public IEnumerable<ReadModels.Job> Overview()
+        public IEnumerable<ReadModels.Models.Job> Overview()
         {
             _logger.LogInformation("Getting Overview");
 
@@ -53,7 +53,7 @@ namespace ArraySorter.Api.Controllers.Job
         }
 
         [HttpGet("{id}")]
-        public ReadModels.Job Get([FromRoute] Guid id)
+        public ReadModels.Models.Job Get([FromRoute] Guid id)
         {
             _logger.LogInformation($"Getting Job {id}");
 
