@@ -2,7 +2,6 @@
 using ArraySorter.Domain;
 using ArraySorter.Application;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using ArraySorter.Infrastructure.Database;
